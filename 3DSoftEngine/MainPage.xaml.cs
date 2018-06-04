@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Numerics;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -16,7 +17,7 @@ namespace _3DSoftEngine
     public sealed partial class MainPage : Page
     {
         private Device device;
-        Mesh mesh = new Mesh(8);
+        Mesh mesh = new Mesh(8,0);
         Camera came = new Camera();
         public MainPage()
         {
@@ -27,23 +28,23 @@ namespace _3DSoftEngine
         
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine("Call this Function");
+           
             WriteableBitmap bmp = new WriteableBitmap(640,480);
             device = new Device(bmp);
 
             frontBuffer.Source = bmp;
-            mesh.Positon = new Vector3(2,2,3);
-            mesh.Vertices[0] = new Vector3(-1, 1, 1);
-            mesh.Vertices[1] = new Vector3(1, 1, 1);
-            mesh.Vertices[2] = new Vector3(-1, -1, 1);
+            mesh.Positon = new Vector3(0,0,0);
+            mesh.Vertices[0] = new Vector3(-1f, 1f, 1f);
+            mesh.Vertices[1] = new Vector3(1f, 1f, 1f);
+            mesh.Vertices[2] = new Vector3(-1f, -1f,1f);
             mesh.Vertices[3] = new Vector3(-1, -1, -1);
             mesh.Vertices[4] = new Vector3(-1, 1, -1);
             mesh.Vertices[5] = new Vector3(1, 1, -1);
             mesh.Vertices[6] = new Vector3(1, -1, 1);
             mesh.Vertices[7] = new Vector3(1, -1, -1);
 
-            came.Position = new Vector3(10,0,10);
-            came.Target = new Vector3(10,0,0);
+            came.Position = new Vector3(0f,0f,-10f);
+            came.Target = new Vector3(0,0,0);
 
             CompositionTarget.Rendering += Rendering;
         }
@@ -51,7 +52,7 @@ namespace _3DSoftEngine
         private void Rendering(object sender, object e)
         {
             device.Clear(0,0,0,255);
-            mesh.Rotation = new Vector3(mesh.Rotation.X + 0.01f, mesh.Rotation.Y + 0.01f, mesh.Rotation.Z);
+            mesh.Rotation = new Vector3((mesh.Rotation.X + 1f) *(float) (Math.PI /180f), (mesh.Rotation.Y + 1f) * (float)(Math.PI / 180f), mesh.Rotation.Z);
             device.Render(came,mesh);
 
             device.Present();
